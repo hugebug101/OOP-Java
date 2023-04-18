@@ -1,5 +1,7 @@
 package org.example.exercise;
 
+import java.util.ArrayList;
+
 public class Comment {
 
     static int commentId;
@@ -7,20 +9,21 @@ public class Comment {
     private String commentContent;
     private String commentDate;
     private String commentTime;
-    private Post postTag;
+    private int postId;
     private boolean isDeleted;
     private boolean isEdited;
     private boolean isLiked;
+    static ArrayList<Comment> comments = new ArrayList<>();
 
     public Comment(String commentAuthor, String commentContent, String commentDate, String commentTime, int postId) {
         this.commentAuthor = commentAuthor;
         this.commentContent = commentContent;
         this.commentDate = commentDate;
         this.commentTime = commentTime;
-        this.postTag = Post.posts.get(postId);
-        commentId++;
+        this.postId = postId;
+//        commentId++;
+        comments.add(this);
     }
-
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
@@ -78,11 +81,19 @@ public class Comment {
         this.commentTime = commentTime;
     }
 
-    public Post getPostTag() {
-        return postTag;
+    public int getPostId() {
+        return postId;
     }
 
-    public void setPostTag(Post postTag) {
-        this.postTag = postTag;
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
+    public int getCommentPostId() {
+        return postId;
+    }
+
+    public int getCommentId() {
+        return comments.indexOf(this);
     }
 }

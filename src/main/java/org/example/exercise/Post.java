@@ -21,6 +21,10 @@ public class Post {
         this.postId = posts.size();
     }
 
+    public static void viewPost(int postId) {
+        System.out.println(posts.get(postId).toString());
+    }
+
     void displayUserPost(ArrayList<Post> userPost) {
         if (userPost.size() == 0) {
             System.out.println("You have no posts");
@@ -56,6 +60,7 @@ public class Post {
     @Override
     public String toString() {
         return "Post{" +
+                "postId=" + postId + '\'' +
                 "postAuthor='" + postAuthor + '\'' +
                 ", postContent='" + postContent + '\'' +
                 ", postDate='" + postDate + '\'' +
@@ -124,5 +129,57 @@ public class Post {
             }
         }
         return null;
+    }
+
+    public int getPostComments() {
+        return postComments.size();
+    }
+
+    //view specific post
+    static void viewSpecificPost(int i) {
+        System.out.println("Post id: " + (posts.get(i).getPostId() + 1));
+        System.out.println("Author: " + posts.get(i).getPostAuthor());
+        System.out.println("Content: " + posts.get(i).getPostContent());
+        System.out.println("Date: " + posts.get(i).getPostDate());
+        System.out.println("Time: " + posts.get(i).getPostTime());
+//        System.out.println("Likes: " + posts.get(i).getPostLikes());
+        System.out.println("Comments: " + posts.get(i).getPostComments());
+        System.out.println();
+
+        //view post comments
+        posts.get(i).viewPostComments();
+    }
+
+    void viewPostComments() {
+        System.out.println("Comments");
+        System.out.println("--------------------");
+        for (Comment comment : postComments
+        ) {
+            System.out.println("Post id: " + (comment.getCommentPostId() + 1));
+            System.out.println("Comment id: " + (comment.getCommentId() + 1));
+            System.out.println("Author: " + comment.getCommentAuthor());
+            System.out.println("Content: " + comment.getCommentContent());
+            System.out.println("Date: " + comment.getCommentDate());
+            System.out.println("Time: " + comment.getCommentTime());
+            System.out.println();
+        }
+        System.out.println("--------------------");
+    }
+
+
+    //view all posts
+    static void viewAllPosts() {
+        System.out.println("All posts");
+        for (Post post : posts
+        ) {
+            System.out.println("Post id: " + (post.getPostId() + 1));
+            System.out.println("Author: " + post.getPostAuthor());
+            System.out.println("Content: " + post.getPostContent());
+            System.out.println("Date: " + post.getPostDate());
+            System.out.println("Time: " + post.getPostTime());
+//            System.out.println("Likes: " + post.getPostLikes());
+            System.out.println("Comments: " + post.getPostComments());
+            System.out.println();
+        }
     }
 }

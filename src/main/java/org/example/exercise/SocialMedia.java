@@ -22,7 +22,34 @@ public class SocialMedia {
 
         System.out.println("Welcome to our social media");
 
+
         currentUser = user1;
+
+        Post.posts.add(new Post(currentUser.getUsername(),
+                "Hello World",
+                "2020-12-12",
+                "12:12:12"));
+        //add another post
+        Post.posts.add(new Post(currentUser.getUsername(),
+                "Hello Dunia",
+                "2020-12-12",
+                "12:12:12"));
+
+        //add comment to the second post
+        Post.posts.get(1).addComment(new Comment(currentUser.getUsername(),
+                "First comment",
+                getCurrentDate(),
+                getCurrentTime(),
+                1));
+
+        //get the first post
+        Post post1 = Post.posts.get(0);
+        System.out.println(post1.toString());
+
+        //get the second post
+        Post post = Post.posts.get(1);
+        System.out.println(post.toString());
+
 
 //        do {
 //
@@ -76,6 +103,7 @@ public class SocialMedia {
         System.out.println("Enter your option: ");
         int option = input.nextInt();
         switch (option) {
+            //create a new post
             case 1 -> {
                 System.out.println("Enter your post content: ");
                 currentUser.addPost(new Post(currentUser.getUsername(),
@@ -83,47 +111,40 @@ public class SocialMedia {
                         getCurrentDate(),
                         getCurrentTime()));
             }
+            //delete a post
             case 2 -> {
                 currentUser.viewPost();
                 System.out.println("Enter the post id you want to delete: ");
                 int postId = input.nextInt();
                 currentUser.deletePost(postId);
             }
+            //view all posts
             case 3 -> {
-                //display all posts with their ids
-                for (Post post : Post.posts
-                ) {
-                    int postNumber = post.getPostId();
-                    System.out.println("Post id: " + ++postNumber);
-                    System.out.println("Post content: " + post.getPostContent());
-                    System.out.println("Post author: " + post.getPostAuthor());
-                    System.out.println("Post date: " + post.getPostDate());
-                    System.out.println("Post time: " + post.getPostTime());
-//                    System.out.println("Post likes: " + post.getPostLikes());
-//                    System.out.println("Post comments: " + post.getPostComments());
 
-                    //display all comments
-//                    for (Comment comment : post.getPostComments()
-//                    ) {
-//                        System.out.println("Comment id: " + comment.getCommentId());
-//                        System.out.println("Comment author: " + comment.getCommentAuthor());
-//                        System.out.println("Comment content: " + comment.getCommentContent());
-//                        System.out.println("Comment date: " + comment.getCommentDate());
-//                        System.out.println("Comment time: " + comment.getCommentTime());
-//                    }
-                    System.out.println();
+                Post.viewAllPosts();
+
+                //prompt user if they want to see the post in detail with comments
+                System.out.println("Do you want to see the post in detail? (y/n)");
+                String answer = input.next();
+                if (answer.equals("y")) {
+                    System.out.println("Enter the post id: ");
+                    int postId = input.nextInt();
+                    Post.viewSpecificPost(postId - 1);
                 }
             }
+            //follow a user
             case 4 -> {
                 System.out.println("Enter the username of the user you want to follow: ");
                 String username = input.next();
                 currentUser.follow(username, currentUser);
             }
+            //unfollow a user
             case 5 -> {
                 System.out.println("Enter the username of the user you want to unfollow: ");
                 String username = input.next();
                 currentUser.unfollow(username, currentUser);
             }
+            //send a message
             case 6 -> {
                 System.out.println("Enter the username of the user you want to send a message to: ");
                 String username = input.next();
@@ -135,35 +156,45 @@ public class SocialMedia {
                     currentUser.sendMessage(message, username);
                 }
             }
+            //view all messages
             case 7 -> currentUser.viewMessages();
             case 8 -> System.exit(0);
+            //like a post
             case 9 -> {
 //                System.out.println("Enter the post id you want to like: ");
 //                int postId = input.nextInt();
 //                currentUser.likePost(postId);
             }
+            //comment on a post
             case 10 -> {
-                //display all posts with their ids
-                for (Post post : Post.posts
-                ) {
-                    int postNumber = post.getPostId();
-                    System.out.println(++postNumber + ". " + post.getPostContent());
-                }
+//                for (Post post : Post.posts
+//                ) {
+//                    int postNumber = post.getPostId();
+//                    System.out.println(++postNumber + ". " + post.getPostContent());
+//                }
+
+                Post.viewAllPosts();
 
                 System.out.println("Enter the post id you want to comment on: ");
                 int postId = input.nextInt();
+                input.nextLine(); //clear buffer
+                boolean commentExists = false;
                 //check if post exists
                 for (Post post : Post.posts
                 ) {
+
                     if (postId - 1 == post.getPostId()) {
                         System.out.println("Enter your comment: ");
-                        String comment = input.next();
-                        post.addComment(new Comment(currentUser.getUsername(), comment, getCurrentDate(), getCurrentTime(), postId));
+                        String comment = input.nextLine();
+                        post.addComment(new Comment(currentUser.getUsername(), comment, getCurrentDate(), getCurrentTime(), post.getPostId()));
+                        commentExists = true;
+                        System.out.println("Comment added");
                         break;
                     }
                 }
-
-                System.out.println("Post not found");
+                if (!commentExists) {
+                    System.out.println("Post not found");
+                }
             }
             default -> {
                 System.out.println("Invalid option");
