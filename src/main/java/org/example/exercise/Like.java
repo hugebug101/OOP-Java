@@ -1,6 +1,7 @@
 package org.example.exercise;
 
 public class Like {
+    private int likeId;
     private String likeAuthor;
     private String likeDate;
     private String likeTime;
@@ -11,6 +12,7 @@ public class Like {
         this.likeDate = likeDate;
         this.likeTime = likeTime;
         this.commentTag = commentTag;
+        likeId++;
     }
 
     public String getLikeAuthor() {

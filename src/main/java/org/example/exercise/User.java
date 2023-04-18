@@ -6,26 +6,34 @@ public class User {
     private String username;
     private String password;
     private String email;
-    ArrayList<Post> userPosts;
+    ArrayList<Post> userPosts = new ArrayList<>();
+    ArrayList<User> following = new ArrayList<>();
+    ArrayList<String> messages = new ArrayList<>();
+
     static ArrayList<User> users = new ArrayList<>();
 
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        userPosts = new ArrayList<>();
         users.add(this);
     }
 
     public void addPost(Post post) {
-        userPosts.add(post);
         System.out.println("Post successfully added");
+        userPosts.add(post);
+
+        //add post to posts arraylist
+        Post.posts.add(post);
     }
 
     public void deletePost(int postIndex) {
         Post post = userPosts.get(postIndex);
-        userPosts.remove(post);
         System.out.println("Post successfully deleted");
+        userPosts.remove(post);
+
+        //delete post from posts arraylist
+        Post.posts.remove(post);
     }
 
     public void findPost(String postContent) {
@@ -38,17 +46,74 @@ public class User {
         }
     }
 
-    public void follow(String username) {
-        System.out.println("You are now following " + username);
+    public void follow(String username, User currentUser) {
+        //check if user is following the user
+        for (User followingUser : following
+        ) {
+            if (followingUser.getUsername().equals(username)) {
+                System.out.println("You are already following " + username);
+                return;
+            }
+        }
 
+        //check if user exists
+        for (User user : users
+        ) {
+            if (user.getUsername().equals(username)) {
+                System.out.println("You are now following " + username);
+                currentUser.following.add(user);
+                return;
+            }
+        }
+
+        System.out.println("User not found");
     }
 
-    public void unfollow(String username) {
-        System.out.println("You are no longer following " + username);
+    public void unfollow(String username, User currentUser) {
+        //check if user is following the user
+        for (User followingUser : following
+        ) {
+            if (followingUser.getUsername().equals(username)) {
+                System.out.println("You are already following " + username);
+                return;
+            }
+        }
+
+        for (User user : users
+        ) {
+            if (user.getUsername().equals(username)) {
+                System.out.println("You are no longer following " + username);
+                currentUser.following.remove(user);
+                return;
+            }
+        }
+
+        System.out.println("User not found");
     }
 
-    public void sendMessage(String message, User user) {
-        System.out.println("Your message is " + message + " to " + user);
+    public void sendMessage(String message, String username) {
+        //find user to send message to
+        for (User user : users
+        ) {
+            if (user.getUsername().equals(username)) {
+                System.out.println("Message sent");
+                user.messages.add(message);
+                return;
+            }
+        }
+
+        System.out.println("User not found");
+    }
+
+    //check if user exist
+    public static boolean checkUser(String username) {
+        for (User user : users
+        ) {
+            if (user.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void viewUsers() {
@@ -59,12 +124,37 @@ public class User {
         }
     }
 
+    public void viewFollowing() {
+        System.out.println("Viewing following");
+        for (User user : following
+        ) {
+            System.out.println(user.getUsername());
+        }
+    }
+
+    public void viewMessages() {
+        //if messages is empty
+        if (messages.size() == 0) {
+            System.out.println("You have no messages");
+        } else {
+            System.out.println("Viewing messages");
+            for (int i = 0; i < messages.size(); i++) {
+                System.out.println(i + " " + messages.get(i));
+            }
+        }
+    }
 
     public void viewPost() {
-        System.out.println("Viewing post");
-        for (Post post : userPosts
-        ) {
-            System.out.println(post.toString());
+        if (userPosts.size() == 0) {
+            System.out.println("Dont have any posts yet");
+        } else {
+            System.out.println("Viewing posts");
+            for (int i = 0; i < userPosts.size(); i++) {
+                System.out.println(i + 1 + " - " + userPosts.get(i).getPostContent() + " By "
+                        + userPosts.get(i).getPostAuthor()
+                        + " on " + userPosts.get(i).getPostDate()
+                        + " " + userPosts.get(i).getPostTime());
+            }
         }
     }
 
@@ -91,4 +181,10 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+//    public void likePost(int postId) {
+//        Post post = Post.posts.get(postId);
+//        post.setLikes(post.getLikes() + 1);
+//        System.out.println("Post liked");
+//    }
 }

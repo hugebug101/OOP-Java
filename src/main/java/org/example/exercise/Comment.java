@@ -1,6 +1,8 @@
 package org.example.exercise;
 
 public class Comment {
+
+    static int commentId;
     private String commentAuthor;
     private String commentContent;
     private String commentDate;
@@ -10,13 +12,15 @@ public class Comment {
     private boolean isEdited;
     private boolean isLiked;
 
-    public Comment(String commentAuthor, String commentContent, String commentDate, String commentTime, Post postTag) {
+    public Comment(String commentAuthor, String commentContent, String commentDate, String commentTime, int postId) {
         this.commentAuthor = commentAuthor;
         this.commentContent = commentContent;
         this.commentDate = commentDate;
         this.commentTime = commentTime;
-        this.postTag = postTag;
+        this.postTag = Post.posts.get(postId);
+        commentId++;
     }
+
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
